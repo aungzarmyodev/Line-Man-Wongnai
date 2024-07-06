@@ -1,4 +1,4 @@
-
+package com.linemanwongnai.app.data.network
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +29,7 @@ object NetworkService {
 
     @Provides
     @Singleton
-    fun provideCarApi(): CoinApi {
+    fun provideCoinApi(): CoinApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

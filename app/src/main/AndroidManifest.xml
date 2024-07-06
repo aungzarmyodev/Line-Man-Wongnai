@@ -14,7 +14,7 @@
         android:theme="@style/Theme.LineManWongnaiApp"
         tools:targetApi="31">
         <activity
-            android:name=".view.home.MainActivity"
+            android:name=".view.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
