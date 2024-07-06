@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/card_background_color"
+        app:cardBackgroundColor="@color/color_card_item_background_color"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true"
@@ -48,7 +48,7 @@
                 tools:text="BitCoin" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textView_coin_label"
+                android:id="@+id/textView_coin_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -71,17 +71,26 @@
                 app:layout_constraintTop_toTopOf="@+id/textView_coin_name"
                 tools:text="$56,671.12" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_interest_rate"
+                app:layout_constraintEnd_toStartOf="@+id/textView_interest_rate"
+                app:layout_constraintTop_toTopOf="@+id/textView_interest_rate"
+                app:srcCompat="@drawable/up_arrow" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_interest_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/padding_8"
-                android:textColor="@color/color_textView_interest_rate"
+                android:textColor="@color/color_textView_increase_rate"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/textView_coin_label"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_coin_symbol"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView_coin_label"
+                app:layout_constraintTop_toTopOf="@+id/textView_coin_symbol"
                 tools:text="$2.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

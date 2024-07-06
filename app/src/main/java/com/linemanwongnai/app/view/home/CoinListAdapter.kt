@@ -29,7 +29,7 @@ class CoinViewHolder(private val binding: CoinListItemBinding) :
 
     fun onBind() {
         binding.textViewCoinName.text = "Bitcoin"
-        binding.textViewCoinLabel.text = "BTC"
+        binding.textViewCoinSymbol.text = "BTC"
         binding.textViewCoinAmount.text = "\$ 1245.12"
         binding.textViewInterestRate.text = "1.7"
     }

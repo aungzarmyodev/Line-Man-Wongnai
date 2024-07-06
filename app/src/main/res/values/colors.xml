@@ -4,7 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_textView_coin_name">#333333</color>
     <color name="color_textView_coin_label">#999999</color>
-    <color name="color_textView_interest_rate">#14BC24</color>
-    <color name="card_background_color">#F9F9F9</color>
+    <color name="color_textView_increase_rate">#14BC24</color>
+    <color name="color_textView_decrease_rate">#F82C2D</color>
+    <color name="color_card_item_background_color">#F9F9F9</color>
+    <color name="color_card_search_background_color">#EEEEEE</color>
+    <color name="color_search_icon">#C4C4C4</color>
+    <color name="color_search_hint_text">#C6C6C6</color>
+
 
 </resources>
