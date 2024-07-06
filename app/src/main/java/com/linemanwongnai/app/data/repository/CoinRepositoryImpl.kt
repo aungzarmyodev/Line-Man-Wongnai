@@ -1,6 +1,6 @@
 package com.linemanwongnai.app.data.repository
 
-import CoinApi
+import com.linemanwongnai.app.data.network.CoinApi
 import javax.inject.Inject
 
 class CoinRepositoryImpl @Inject constructor(private val coinApi: CoinApi) : CoinRepository {
