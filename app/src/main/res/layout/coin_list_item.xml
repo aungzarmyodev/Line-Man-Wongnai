@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        app:cardBackgroundColor="@color/card_background_color"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:layout_margin="8dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,8 +23,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/padding_48"
+                android:layout_height="@dimen/padding_48"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -30,23 +32,57 @@
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_coin_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView_coin_name"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="BitCoin"
+                android:layout_marginStart="@dimen/padding_8"
+                android:layout_marginEnd="@dimen/padding_8"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/color_textView_coin_name"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/textView_coin_amount"
                 app:layout_constraintStart_toEndOf="@+id/image_icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="BitCoin" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_coin_label"
+                android:id="@+id/textView_coin_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="BTC"
+                android:textColor="@color/color_textView_coin_label"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/image_icon"
-                app:layout_constraintTop_toBottomOf="@+id/text_coin_name" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_coin_name"
+                tools:text="BTC" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textView_coin_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/padding_8"
+                android:textColor="@color/color_textView_coin_name"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_coin_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView_coin_name"
+                tools:text="$56,671.12" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textView_interest_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/padding_8"
+                android:textColor="@color/color_textView_interest_rate"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_coin_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView_coin_label"
+                tools:text="$2.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

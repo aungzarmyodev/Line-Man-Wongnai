@@ -18,11 +18,20 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        if (holder is CoinViewHolder) {
+            holder.onBind()
+        }
     }
 }
 
 class CoinViewHolder(private val binding: CoinListItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+    ViewHolder(binding.root) {
+
+    fun onBind() {
+        binding.textViewCoinName.text = "Bitcoin"
+        binding.textViewCoinLabel.text = "BTC"
+        binding.textViewCoinAmount.text = "\$ 1245.12"
+        binding.textViewInterestRate.text = "1.7"
+    }
 
 }
