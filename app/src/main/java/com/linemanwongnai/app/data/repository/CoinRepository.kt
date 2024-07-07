@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class CoinRepository @Inject constructor(private val coinApi: CoinApi) {
 
-    suspend fun getCoinList(): ResponseData {
+    suspend fun getCoinList(): ResponseData? {
         return withContext(Dispatchers.IO) {
             coinApi.getCoinList()
         }

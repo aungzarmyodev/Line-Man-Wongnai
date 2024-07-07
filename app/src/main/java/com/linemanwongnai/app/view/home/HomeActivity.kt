@@ -50,11 +50,17 @@ class HomeActivity : AppCompatActivity() {
             when (result.status) {
                 Status.SUCCESS -> {
                     binding.loading.visibility = View.GONE
-                    if (!result.data?.data?.coinList.isNullOrEmpty()) {
+                    if (!result.data.isNullOrEmpty()) {
                         binding.textViewEmpty.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.refreshLayout.isRefreshing = false
-                        adapter.addData(result.data!!.data.coinList, isRefreshing)
+
+                        // get top rank three coin
+                        val topRankThreeCoin =
+                            result.data.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 }
+
+                        adapter.addData(result.data, isRefreshing)
+                        adapter.addTopRankThreeCoin(topRankThreeCoin)
 
                     } else {
                         binding.textViewEmpty.visibility = View.VISIBLE
