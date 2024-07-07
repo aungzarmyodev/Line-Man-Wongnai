@@ -17,18 +17,34 @@ import javax.inject.Inject
 
 class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>() {
 
+    private val itemType = 0
+    private val footerType = 1
+
     private val data = mutableListOf<CoinModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val view =
-            CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CoinViewHolder(view)
+        return if (viewType == footerType) {
+            val view =
+                FooterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FooterViewHolder(view)
 
+        } else {
+            val view =
+                CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            CoinViewHolder(view)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            data.size -> footerType
+            else -> itemType
+        }
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return data.size + 1
     }
 
     fun addData(list: List<CoinModel>, isRefreshing: Boolean) {

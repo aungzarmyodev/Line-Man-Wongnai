@@ -14,7 +14,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkService {
-    private const val BASE_URL = "https://api.coinranking.com"
+    private const val BASE_URL = "https://api.coinranking.com12"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
