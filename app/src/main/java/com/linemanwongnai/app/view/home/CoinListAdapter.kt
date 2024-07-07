@@ -15,6 +15,7 @@ import com.linemanwongnai.app.databinding.InviteFriendLayoutBinding
 import com.linemanwongnai.app.databinding.ItemViewHeaderLayoutBinding
 import com.linemanwongnai.app.model.CoinModel
 import com.linemanwongnai.app.utils.Utils
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>() {
@@ -128,8 +129,10 @@ class CoinViewHolder(private val binding: CoinListItemBinding) :
     fun onBind(coinModel: CoinModel) {
         binding.textViewCoinName.text = coinModel.name
         binding.textViewCoinSymbol.text = coinModel.symbol
+        val decimalFormat = DecimalFormat("#,###.00000")
+        val formattedValue: String = decimalFormat.format(coinModel.price)
         binding.textViewCoinAmount.text =
-            binding.root.context.getString(R.string.label_coin_price, coinModel.price)
+            binding.root.context.getString(R.string.label_coin_price, formattedValue)
 
         if (!coinModel.change.isNullOrEmpty()) {
             if (coinModel.change!!.contains("-")) {
