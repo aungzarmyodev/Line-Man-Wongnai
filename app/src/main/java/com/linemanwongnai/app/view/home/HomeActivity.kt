@@ -10,7 +10,6 @@ import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
 import com.linemanwongnai.app.model.Status
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
