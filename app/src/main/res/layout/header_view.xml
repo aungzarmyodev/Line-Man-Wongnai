@@ -9,15 +9,15 @@
         android:id="@+id/textView_label_top_3_coin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:padding="@dimen/padding_8"
+        android:textColor="@color/color_textView_coin_name"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:maxLines="1"
-        android:textColor="@color/color_textView_coin_name"
-        android:text="@string/label_top_rank_three_coin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/label_top_rank_three_coin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_one_layout"
@@ -28,7 +28,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
 
-        <include layout="@layout/top_rank_three_coin_layout" />
+        <include
+            android:id="@+id/included_top_one_layout"
+            layout="@layout/top_rank_three_coin_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -41,7 +43,9 @@
         app:layout_constraintStart_toEndOf="@+id/top_one_layout"
         app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
 
-        <include layout="@layout/top_rank_three_coin_layout" />
+        <include
+            android:id="@+id/included_top_two_layout"
+            layout="@layout/top_rank_three_coin_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -54,7 +58,9 @@
         app:layout_constraintStart_toEndOf="@+id/top_two_layout"
         app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
 
-        <include layout="@layout/top_rank_three_coin_layout" />
+        <include
+            android:id="@+id/included_top_three_layout"
+            layout="@layout/top_rank_three_coin_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
