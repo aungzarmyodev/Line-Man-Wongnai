@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">LineManWongnaiApp</string>
     <string name="search">Search</string>
+    <string name="empty_data">Empty coin</string>
+    <string name="label_no_network_error">Please check your internet connection!.</string>
+    <string name="label_ok">OK</string>
+    <string name="label_unknown_error">Please try again later.</string>
+    <string name="label_coin_price">\$ %f</string>
 </resources>
