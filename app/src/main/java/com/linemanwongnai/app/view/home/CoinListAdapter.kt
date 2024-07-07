@@ -31,6 +31,7 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
     val itemClick = MutableLiveData<CoinModel>()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return when (viewType) {
@@ -120,6 +121,15 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
             is HeaderViewHolder -> {
                 holder.onBind(topRankThreeCoinList)
+                holder.binding.topOneLayout.setOnClickListener {
+                    itemClick.postValue(topRankThreeCoinList[0])
+                }
+                holder.binding.topTwoLayout.setOnClickListener {
+                    itemClick.postValue(topRankThreeCoinList[1])
+                }
+                holder.binding.topThreeLayout.setOnClickListener {
+                    itemClick.postValue(topRankThreeCoinList[2])
+                }
             }
 //
 //            is InviteFriendViewHolder -> {
@@ -182,7 +192,7 @@ class CoinViewHolder(private val binding: CoinListItemBinding) :
 class CoinItemListViewHeaderViewHolder(binding: ItemViewHeaderLayoutBinding) :
     ViewHolder(binding.root)
 
-class HeaderViewHolder(private val binding: HeaderViewBinding) : ViewHolder(binding.root) {
+class HeaderViewHolder(val binding: HeaderViewBinding) : ViewHolder(binding.root) {
     fun onBind(coinList: List<CoinModel>) {
         binding.textViewLabelTop3Coin.text = HtmlCompat.fromHtml(
             binding.root.context.getString(R.string.label_top_rank_three_coin),

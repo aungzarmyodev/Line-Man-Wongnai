@@ -7,10 +7,11 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/padding_4"
+        app:cardBackgroundColor="@color/color_invite_friend_layout"
+        app:cardCornerRadius="@dimen/padding_8"
         app:cardElevation="@dimen/padding_4"
         app:contentPadding="@dimen/padding_8"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
