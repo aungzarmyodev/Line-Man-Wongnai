@@ -6,8 +6,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
+import com.linemanwongnai.app.databinding.CoinDetailViewBottomSheetBinding
 import com.linemanwongnai.app.model.Status
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -82,6 +84,20 @@ class HomeActivity : AppCompatActivity() {
                     binding.loading.visibility = View.VISIBLE
                 }
             }
+        }
+
+        adapter.itemClick.observe(this) { coinModel ->
+            val dialog = BottomSheetDialog(this)
+            val bottomSheetBinding =
+                CoinDetailViewBottomSheetBinding.inflate(layoutInflater, null, false)
+            bottomSheetBinding.buttonGoToWebsite.setOnClickListener {
+                dialog.dismiss()
+                Toast.makeText(this, getString(R.string.label_go_to_website), Toast.LENGTH_LONG)
+                    .show()
+            }
+            dialog.setCancelable(true)
+            dialog.setContentView(bottomSheetBinding.root)
+            dialog.show()
         }
     }
 }
