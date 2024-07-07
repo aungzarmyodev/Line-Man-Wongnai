@@ -140,10 +140,15 @@ class CoinViewHolder(private val binding: CoinListItemBinding) :
     fun onBind(coinModel: CoinModel) {
         binding.textViewCoinName.text = coinModel.name
         binding.textViewCoinSymbol.text = coinModel.symbol
-        val decimalFormat = DecimalFormat("#,###.00000")
-        val formattedValue: String = decimalFormat.format(coinModel.price)
-        binding.textViewCoinAmount.text =
-            binding.root.context.getString(R.string.label_coin_price, formattedValue)
+        val priceFormat = DecimalFormat("#,###.#####")
+        try {
+            binding.textViewCoinAmount.text =
+                binding.root.context.getString(
+                    R.string.label_coin_price,
+                    priceFormat.format(coinModel.price)
+                )
+        } catch (_: Exception) {
+        }
 
         if (!coinModel.change.isNullOrEmpty()) {
             if (coinModel.change!!.contains("-")) {

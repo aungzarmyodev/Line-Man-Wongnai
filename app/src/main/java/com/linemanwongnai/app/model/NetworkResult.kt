@@ -6,7 +6,7 @@ sealed class NetworkResult<T>(
     val status: Status
 ) {
 
-    class Success<T>(data: T) : NetworkResult<T>(data, null, Status.SUCCESS)
+    class Success<T>(data: T?) : NetworkResult<T>(data, null, Status.SUCCESS)
 
     class Error<T>(exception: Exception) : NetworkResult<T>(null, exception, Status.ERROR)
 
