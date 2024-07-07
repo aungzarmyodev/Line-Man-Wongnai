@@ -18,6 +18,9 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
     private var mutableLiveData = MutableLiveData<NetworkResult<List<CoinModel>>>()
     val liveData: LiveData<NetworkResult<List<CoinModel>>> = mutableLiveData
 
+    private var coinDetailMutableLiveData = MutableLiveData<NetworkResult<CoinModel>>()
+    val coinDetailLiveData: LiveData<NetworkResult<CoinModel>> = coinDetailMutableLiveData
+
     init {
         mutableLiveData.postValue(NetworkResult.Loading())
         getCoinList()
@@ -27,13 +30,30 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
         viewModelScope.launch {
             try {
                 val result = coinRepository.getCoinList()
-                if (!result?.data?.coinList.isNullOrEmpty()) {
-                    mutableLiveData.postValue(NetworkResult.Success(result!!.data.coinList))
+                val coinList = result?.data?.coinList
+                if (!coinList.isNullOrEmpty()) {
+                    mutableLiveData.postValue(NetworkResult.Success(coinList))
                 } else {
                     mutableLiveData.postValue(NetworkResult.Success(emptyList()))
                 }
             } catch (e: Exception) {
                 mutableLiveData.postValue(NetworkResult.Error(e))
+            }
+        }
+    }
+
+    fun getCoinDetail(uuid: String) {
+        viewModelScope.launch {
+            try {
+                val result = coinRepository.getCoinDetail(uuid)
+                val coinModel = result?.data?.coinModel
+                if (coinModel != null) {
+                    coinDetailMutableLiveData.postValue(NetworkResult.Success(coinModel))
+                } else {
+                    coinDetailMutableLiveData.postValue(NetworkResult.Success(null))
+                }
+            } catch (e: Exception) {
+                coinDetailMutableLiveData.postValue(NetworkResult.Error(e))
             }
         }
     }

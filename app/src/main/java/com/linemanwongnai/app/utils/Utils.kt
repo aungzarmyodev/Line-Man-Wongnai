@@ -8,6 +8,9 @@ import com.linemanwongnai.app.R
 
 object Utils {
 
+    const val MILLION = 1000000f
+    const val BILLION = 1000000000f
+    const val TRILLION = 1000000000000f
     fun setImage(context: Context, imageUri: String?, imageView: AppCompatImageView) {
 
         // image caching
