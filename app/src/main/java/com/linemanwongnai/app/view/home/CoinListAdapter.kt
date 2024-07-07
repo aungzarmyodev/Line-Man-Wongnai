@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.linemanwongnai.app.R
@@ -27,6 +28,8 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
     private val coinList = mutableListOf<CoinModel>()
     private val topRankThreeCoinList = mutableListOf<CoinModel>()
+
+    val itemClick = MutableLiveData<CoinModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -104,6 +107,14 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                     holder.onBind(coinList[position - 2])
                 } else {
                     holder.onBind(coinList[position - 1])
+                }
+
+                holder.itemView.setOnClickListener {
+                    if (topRankThreeCoinList.isNotEmpty()) {
+                        itemClick.postValue(coinList[position - 2])
+                    } else {
+                        itemClick.postValue(coinList[position - 2])
+                    }
                 }
             }
 

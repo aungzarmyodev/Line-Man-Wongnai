@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/padding_8"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_16">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_coin_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/default_icon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_coin_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Bitcoin"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_coin_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_price_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_price"
+            android:textColor="@color/color_textView_coin_name"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/image_coin_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView_coin_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_8"
+            android:text="$12.324234"
+            android:textColor="@color/color_textView_coin_name"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_price_label"
+            app:layout_constraintStart_toEndOf="@+id/textView_price_label"
+            app:layout_constraintTop_toTopOf="@+id/textView_price_label" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_market_cap_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_market_cap"
+            android:textColor="@color/color_textView_coin_name"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/image_coin_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView_price_label" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_market_cap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_8"
+            android:text="$1.07 billion"
+            android:textColor="@color/color_textView_coin_name"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_market_cap_label"
+            app:layout_constraintStart_toEndOf="@+id/textView_market_cap_label"
+            app:layout_constraintTop_toTopOf="@+id/textView_market_cap_label" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_16"
+            android:paddingEnd="@dimen/padding_8"
+            android:text="Bitcoin is the first digital currency that allow user to send and receive money without interference of a central Bank or government"
+            android:textColor="@color/color_textView_coin_name"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_market_cap_label" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/padding_16"
+            android:background="@color/color_textView_coin_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_description" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_go_to_website"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_go_to_website"
+            android:textColor="@color/color_go_to_website_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
