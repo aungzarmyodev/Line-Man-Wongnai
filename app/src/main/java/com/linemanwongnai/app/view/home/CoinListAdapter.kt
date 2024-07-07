@@ -1,109 +1,62 @@
 package com.linemanwongnai.app.view.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.CoinListItemBinding
 import com.linemanwongnai.app.databinding.FooterViewBinding
 import com.linemanwongnai.app.databinding.HeaderViewBinding
 import com.linemanwongnai.app.databinding.InviteFriendLayoutBinding
+import com.linemanwongnai.app.model.CoinModel
+import com.linemanwongnai.app.utils.Utils
 import javax.inject.Inject
 
 class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>() {
 
-    private val header = 0
-    private val itemType = 1
-    private val footer = 2
-    private val inviteFriend = 3
-    private var interval = 2
-    private var showIndex = 2
-    private var startInterval = 2
-
-    private val data = mutableListOf<Int>()
+    private val data = mutableListOf<CoinModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        when (viewType) {
-            header -> {
-                val view =
-                    HeaderViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return HeaderViewHolder(view)
-            }
+        val view =
+            CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CoinViewHolder(view)
 
-            footer -> {
-                val view =
-                    FooterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return FooterViewHolder(view)
-            }
-
-            inviteFriend -> {
-                val view =
-                    InviteFriendLayoutBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                return InviteFriendViewHolder(view)
-            }
-
-            else -> {
-                val view =
-                    CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return CoinViewHolder(view)
-            }
-        }
     }
 
     override fun getItemCount(): Int {
-        return 20 + 2
+        return data.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-
-        return if (position == header) {
-            header
-        } else if (position == 51) {
-            footer
-        } else if (isShowInviteFriend(position)) {
-            inviteFriend
-        } else {
-            itemType
+    fun addData(list: List<CoinModel>, isRefreshing: Boolean) {
+        if (isRefreshing) {
+            data.clear()
         }
-    }
-
-    private fun isShowInviteFriend(position: Int): Boolean {
-        var isShow = false
-        if (position == showIndex + 1) {
-            isShow = true
-            startInterval *= interval
-            showIndex += startInterval + 1
-        }
-        return isShow
-    }
-
-    fun addData(list: List<Int>) {
-
+        data.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is CoinViewHolder -> {
-                holder.onBind()
+                holder.onBind(data[position])
             }
 
-            is HeaderViewHolder -> {
-                holder.onBind()
-            }
-
-            is InviteFriendViewHolder -> {
-                holder.onBind()
-                holder.binding.root.setOnClickListener {  }
-            }
-
-            is FooterViewHolder -> {
-
-            }
+//            is HeaderViewHolder -> {
+//                holder.onBind()
+//            }
+//
+//            is InviteFriendViewHolder -> {
+//                holder.onBind()
+//                holder.binding.root.setOnClickListener { }
+//            }
+//
+//            is FooterViewHolder -> {
+//
+//            }
         }
     }
 }
@@ -111,11 +64,38 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 class CoinViewHolder(private val binding: CoinListItemBinding) :
     ViewHolder(binding.root) {
 
-    fun onBind() {
-        binding.textViewCoinName.text = "Bitcoin"
-        binding.textViewCoinSymbol.text = "BTC"
-        binding.textViewCoinAmount.text = "\$ 1245.12"
-        binding.textViewInterestRate.text = "1.7"
+    fun onBind(coinModel: CoinModel) {
+        binding.textViewCoinName.text = coinModel.name
+        binding.textViewCoinSymbol.text = coinModel.symbol
+        binding.textViewCoinAmount.text =
+            binding.root.context.getString(R.string.label_coin_price, coinModel.price)
+
+        if (!coinModel.change.isNullOrEmpty()) {
+            if (coinModel.change!!.contains("-")) {
+                binding.textViewChange.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.color_textView_decrease_rate
+                    )
+                )
+                binding.imageDown.visibility = View.VISIBLE
+                binding.imageUp.visibility = View.GONE
+            } else {
+                binding.textViewChange.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.color_textView_increase_rate
+                    )
+                )
+                binding.imageDown.visibility = View.GONE
+                binding.imageUp.visibility = View.VISIBLE
+            }
+            binding.textViewChange.text = coinModel.change
+        }
+
+        if (!coinModel.iconUrl.isNullOrEmpty()) {
+            Utils.setImage(binding.root.context, coinModel.iconUrl, binding.imageIcon)
+        }
     }
 }
 
