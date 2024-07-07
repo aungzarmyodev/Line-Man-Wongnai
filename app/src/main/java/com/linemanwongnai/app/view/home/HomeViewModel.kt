@@ -19,6 +19,7 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
     val liveData: LiveData<NetworkResult<ResponseData>> = mutableLiveData
 
     init {
+        mutableLiveData.postValue(NetworkResult.Loading())
         getCoinList()
     }
 

@@ -2,15 +2,14 @@ package com.linemanwongnai.app.view.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
 import com.linemanwongnai.app.model.Status
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,6 +49,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.liveData.observe(this) { result ->
             when (result.status) {
                 Status.SUCCESS -> {
+                    binding.loading.visibility = View.GONE
                     if (!result.data?.data?.coinList.isNullOrEmpty()) {
                         binding.textViewEmpty.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
@@ -63,34 +63,17 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 Status.ERROR -> {
-                    when (result?.error) {
-                        is IOException -> {
-                            val snackBar = Snackbar.make(
-                                binding.root,
-                                getString(R.string.label_no_network_error),
-                                Snackbar.LENGTH_INDEFINITE
-                            )
-                            snackBar.setAction(
-                                getString(R.string.label_ok)
-                            ) { snackBar.dismiss() }
-                            snackBar.show()
-                        }
-
-                        else -> {
-                            val snackBar = Snackbar.make(
-                                binding.recyclerView,
-                                if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
-                                    R.string.label_unknown_error
-                                ),
-                                Snackbar.LENGTH_LONG
-                            )
-                            snackBar.show()
-                        }
-                    }
+                    binding.loading.visibility = View.GONE
+                    binding.refreshLayout.isRefreshing = false
+                    val message =
+                        if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
+                            R.string.label_unknown_error
+                        )
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 }
 
                 Status.LOADING -> {
-
+                    binding.loading.visibility = View.VISIBLE
                 }
             }
         }

@@ -1,9 +1,12 @@
 package com.linemanwongnai.app.view.home
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.linemanwongnai.app.R
@@ -17,18 +20,46 @@ import javax.inject.Inject
 
 class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>() {
 
+    private val headerType = 0
+    private val itemType = 1
+    private val footerType = 2
+
     private val data = mutableListOf<CoinModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val view =
-            CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CoinViewHolder(view)
+        return when (viewType) {
+            footerType -> {
+                val view =
+                    FooterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FooterViewHolder(view)
 
+            }
+
+            headerType -> {
+                val view =
+                    HeaderViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                HeaderViewHolder(view)
+            }
+
+            else -> {
+                val view =
+                    CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                CoinViewHolder(view)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            headerType -> headerType
+            data.size + 1 -> footerType
+            else -> itemType
+        }
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return if (data.isNotEmpty()) data.size + 2 else 0
     }
 
     fun addData(list: List<CoinModel>, isRefreshing: Boolean) {
@@ -42,12 +73,12 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is CoinViewHolder -> {
-                holder.onBind(data[position])
+                holder.onBind(data[position - 1])
             }
 
-//            is HeaderViewHolder -> {
-//                holder.onBind()
-//            }
+            is HeaderViewHolder -> {
+                holder.onBind()
+            }
 //
 //            is InviteFriendViewHolder -> {
 //                holder.onBind()
@@ -102,6 +133,10 @@ class CoinViewHolder(private val binding: CoinListItemBinding) :
 class HeaderViewHolder(private val binding: HeaderViewBinding) : ViewHolder(binding.root) {
     fun onBind() {
 
+        binding.textViewLabelTop3Coin.text = HtmlCompat.fromHtml(
+            binding.root.context.getString(R.string.label_top_rank_three_coin),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 }
 

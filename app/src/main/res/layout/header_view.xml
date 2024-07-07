@@ -6,13 +6,56 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_label_top_3_coin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_8"
-        android:text="Top 3 rank crypto"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:textColor="@color/color_textView_coin_name"
+        android:text="@string/label_top_rank_three_coin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_one_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/top_two_layout"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+
+        <include layout="@layout/top_rank_three_coin_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_two_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/top_three_layout"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/top_one_layout"
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+
+        <include layout="@layout/top_rank_three_coin_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_three_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/top_two_layout"
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+
+        <include layout="@layout/top_rank_three_coin_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,4 +6,5 @@
     <string name="label_ok">OK</string>
     <string name="label_unknown_error">Please try again later.</string>
     <string name="label_coin_price">\$ %f</string>
+    <string name="label_top_rank_three_coin"><![CDATA[Top <font color="red">3</font> rank crypto]]></string>
 </resources>
