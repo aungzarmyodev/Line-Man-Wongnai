@@ -135,7 +135,7 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                     if (topRankThreeCoinList.isNotEmpty() && !isSearch) {
                         itemClick.postValue(coinList[position - 2])
                     } else {
-                        itemClick.postValue(coinList[position - 2])
+                        itemClick.postValue(coinList[position - 1])
                     }
                 }
             }
