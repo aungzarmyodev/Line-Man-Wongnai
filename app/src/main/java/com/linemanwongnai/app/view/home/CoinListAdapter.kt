@@ -15,6 +15,7 @@ import com.linemanwongnai.app.databinding.HeaderViewBinding
 import com.linemanwongnai.app.databinding.InviteFriendLayoutBinding
 import com.linemanwongnai.app.databinding.ItemViewHeaderLayoutBinding
 import com.linemanwongnai.app.model.CoinModel
+import com.linemanwongnai.app.model.FriendInviteModel
 import com.linemanwongnai.app.utils.Utils
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -25,10 +26,12 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     private val itemHeaderType = 1
     private val itemType = 2
     private val footerType = 3
+    private val friendInviteLayout = 4
 
-    private val coinList = mutableListOf<CoinModel>()
+    val coinList = mutableListOf<Any>()
     private val topRankThreeCoinList = mutableListOf<CoinModel>()
     val itemClick = MutableLiveData<CoinModel>()
+    val itemFriendInviteClick = MutableLiveData<String>()
 
     // filter by search coin
     private var isSearch = false
@@ -60,6 +63,16 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                 CoinItemListViewHeaderViewHolder(view)
             }
 
+            friendInviteLayout -> {
+                val view =
+                    InviteFriendLayoutBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                InviteFriendViewHolder(view)
+            }
+
             else -> {
                 val view =
                     CoinListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -80,7 +93,9 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                 headerType -> headerType
                 itemHeaderType -> itemHeaderType
                 coinList.size + 2 -> footerType
-                else -> itemType
+                else -> {
+                    if (coinList[position - 2] is FriendInviteModel) friendInviteLayout else itemType
+                }
             }
         }
     }
@@ -98,7 +113,7 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
         return itemCount
     }
 
-    fun addData(list: List<CoinModel>, isRefreshing: Boolean) {
+    fun addData(list: List<Any>, isRefreshing: Boolean) {
         isSearch = false
         if (isRefreshing) {
             coinList.clear()
@@ -140,9 +155,9 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
                 holder.itemView.setOnClickListener {
                     if (topRankThreeCoinList.isNotEmpty() && !isSearch) {
-                        itemClick.postValue(coinList[position - 2])
+                        itemClick.postValue(coinList[position - 2] as CoinModel)
                     } else {
-                        itemClick.postValue(coinList[position - 1])
+                        itemClick.postValue(coinList[position - 1] as CoinModel)
                     }
                 }
             }
@@ -159,6 +174,13 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                     itemClick.postValue(topRankThreeCoinList[2])
                 }
             }
+
+            is InviteFriendViewHolder -> {
+                holder.onBind()
+                holder.itemView.setOnClickListener {
+                    itemFriendInviteClick.postValue(Utils.FRIEND_INVITE_LINK)
+                }
+            }
         }
     }
 }
@@ -166,44 +188,46 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 class CoinViewHolder(private val binding: CoinListItemBinding) :
     ViewHolder(binding.root) {
 
-    fun onBind(coinModel: CoinModel) {
-        binding.textViewCoinName.text = coinModel.name
-        binding.textViewCoinSymbol.text = coinModel.symbol
-        val priceFormat = DecimalFormat("#,###.#####")
-        try {
-            binding.textViewCoinAmount.text =
-                binding.root.context.getString(
-                    R.string.label_coin_price,
-                    priceFormat.format(coinModel.price)
-                )
-        } catch (_: Exception) {
-        }
-
-        if (!coinModel.change.isNullOrEmpty()) {
-            if (coinModel.change!!.contains("-")) {
-                binding.textViewChange.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.color_textView_decrease_rate
+    fun onBind(coinModel: Any) {
+        if (coinModel is CoinModel) {
+            binding.textViewCoinName.text = coinModel.name
+            binding.textViewCoinSymbol.text = coinModel.symbol
+            val priceFormat = DecimalFormat("#,###.#####")
+            try {
+                binding.textViewCoinAmount.text =
+                    binding.root.context.getString(
+                        R.string.label_coin_price,
+                        priceFormat.format(coinModel.price)
                     )
-                )
-                binding.imageDown.visibility = View.VISIBLE
-                binding.imageUp.visibility = View.GONE
-            } else {
-                binding.textViewChange.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.color_textView_increase_rate
-                    )
-                )
-                binding.imageDown.visibility = View.GONE
-                binding.imageUp.visibility = View.VISIBLE
+            } catch (_: Exception) {
             }
-            binding.textViewChange.text = coinModel.change
-        }
 
-        if (!coinModel.iconUrl.isNullOrEmpty()) {
-            Utils.setImage(binding.root.context, coinModel.iconUrl, binding.imageIcon)
+            if (!coinModel.change.isNullOrEmpty()) {
+                if (coinModel.change!!.contains("-")) {
+                    binding.textViewChange.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.color_textView_decrease_rate
+                        )
+                    )
+                    binding.imageDown.visibility = View.VISIBLE
+                    binding.imageUp.visibility = View.GONE
+                } else {
+                    binding.textViewChange.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            R.color.color_textView_increase_rate
+                        )
+                    )
+                    binding.imageDown.visibility = View.GONE
+                    binding.imageUp.visibility = View.VISIBLE
+                }
+                binding.textViewChange.text = coinModel.change
+            }
+
+            if (!coinModel.iconUrl.isNullOrEmpty()) {
+                Utils.setImage(binding.root.context, coinModel.iconUrl, binding.imageIcon)
+            }
         }
     }
 }
@@ -340,6 +364,9 @@ class FooterViewHolder(val binding: FooterViewBinding) : ViewHolder(binding.root
 class InviteFriendViewHolder(val binding: InviteFriendLayoutBinding) :
     ViewHolder(binding.root) {
     fun onBind() {
-
+        binding.textViewInviteFriend.text = HtmlCompat.fromHtml(
+            binding.root.context.getString(R.string.label_invite_friend_reason),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 }

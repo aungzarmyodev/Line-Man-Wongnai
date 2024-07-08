@@ -13,6 +13,7 @@ object Utils {
     const val TRILLION = 1000000000000f
     const val LIMIT = 20
     const val SEARCH_LIMIT = 7
+    const val FRIEND_INVITE_LINK = "https://careers.lmwn.com"
     fun setImage(context: Context, imageUri: String?, imageView: AppCompatImageView) {
 
         // image caching

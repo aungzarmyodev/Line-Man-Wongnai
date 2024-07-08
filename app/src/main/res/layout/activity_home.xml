@@ -47,12 +47,12 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/color_search_hint_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/image_cancel"
+                app:layout_constraintEnd_toStartOf="@+id/image_clear_icon"
                 app:layout_constraintStart_toEndOf="@+id/image_search"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_cancel"
+                android:id="@+id/image_clear_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_8"
