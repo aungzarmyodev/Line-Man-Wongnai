@@ -36,6 +36,7 @@ class HomeActivity : AppCompatActivity() {
     private var isRefreshing = true
     private var coinList = mutableListOf<CoinModel>()
     private var topRankThreeCoinList = mutableListOf<CoinModel>()
+    private var pageNumber = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
