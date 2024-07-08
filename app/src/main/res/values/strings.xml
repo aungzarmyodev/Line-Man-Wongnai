@@ -6,7 +6,9 @@
     <string name="label_ok">OK</string>
     <string name="label_unknown_error">Please try again later.</string>
     <string name="label_coin_price">\$ %s</string>
-    <string name="label_top_rank_three_coin"><![CDATA[Top <font color="red">3</font> rank crypto]]></string>
+    <string name="label_top">Top</string>
+    <string name="label_3">3</string>
+    <string name="label_rank_crypto">rank crypto</string>
     <string name="label_coin_item_list_view_header">Buy, sell and hold crypto</string>
     <string name="label_price">PRICE</string>
     <string name="label_market_cap">MARKET CAP</string>

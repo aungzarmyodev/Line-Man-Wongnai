@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">#333333</color>
+    <color name="colorPrimaryDark">#018786</color>
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorSecondary">#03DAC6</color>
     <color name="colorSecondaryDark">#018786</color>
     <color name="colorOnSecondary">#000000</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="color_textView_coin_name">#333333</color>
-    <color name="color_textView_coin_label">#999999</color>
+    <color name="color_textView_coin_name">#FFFFFF</color>
+    <color name="color_textView_coin_label">#888888</color>
     <color name="color_textView_increase_rate">#14BC24</color>
     <color name="color_textView_decrease_rate">#F82C2D</color>
-    <color name="color_card_item_background_color">#F9F9F9</color>
-    <color name="color_card_search_background_color">#EEEEEE</color>
+    <color name="color_card_item_background_color">#3C3C3C</color>
+    <color name="color_card_search_background_color">#555555</color>
     <color name="color_search_icon">#C4C4C4</color>
     <color name="color_search_hint_text">#C6C6C6</color>
     <color name="color_go_to_website_button">#38A0FF</color>
@@ -22,7 +19,6 @@
     <color name="color_gift_box">#E48E67</color>
     <color name="color_loading_bar">#38A0FF</color>
     <color name="color_invite_friend_label">#333333</color>
-    <color name="color_bottom_sheet_background_color">#F9F9F9</color>
-    <color name="color_label_3">#C52222</color>
-
+    <color name="color_bottom_sheet_background_color">#3C3C3C</color>
+    <color name="color_label_3">#FFC95B</color>
 </resources>

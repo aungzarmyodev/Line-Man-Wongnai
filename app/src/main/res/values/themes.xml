@@ -2,7 +2,19 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.LineManWongnaiApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryDark</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:statusBarColor">@color/colorOnPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- For Normal/Light Mode -->
+        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+
     </style>
 
     <style name="Theme.LineManWongnaiApp" parent="Base.Theme.LineManWongnaiApp" />
