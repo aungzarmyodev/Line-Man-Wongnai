@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?colorPrimary"
     tools:context=".view.home.HomeActivity">
 
     <androidx.cardview.widget.CardView
@@ -44,7 +44,7 @@
                 android:inputType="text"
                 android:maxLength="50"
                 android:maxLines="1"
-                android:textColor="@color/black"
+                android:textColor="@color/color_textView_coin_name"
                 android:textColorHint="@color/color_search_hint_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/image_clear_icon"

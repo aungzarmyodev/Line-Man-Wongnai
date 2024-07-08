@@ -237,11 +237,6 @@ class CoinItemListViewHeaderViewHolder(binding: ItemViewHeaderLayoutBinding) :
 
 class HeaderViewHolder(val binding: HeaderViewBinding) : ViewHolder(binding.root) {
     fun onBind(coinList: List<CoinModel>) {
-        binding.textViewLabelTop3Coin.text = HtmlCompat.fromHtml(
-            binding.root.context.getString(R.string.label_top_rank_three_coin),
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-
         coinList.forEach { coinModel ->
             when (coinModel.rank) {
                 1 -> {

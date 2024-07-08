@@ -6,18 +6,50 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView_label_top_3_coin"
-        android:layout_width="0dp"
+        android:id="@+id/textView_label_top"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:padding="@dimen/padding_8"
+        android:paddingTop="@dimen/padding_8"
+        android:layout_marginStart="@dimen/padding_8"
+        android:paddingBottom="@dimen/padding_8"
+        android:text="@string/label_top"
         android:textColor="@color/color_textView_coin_name"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/label_top_rank_three_coin" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_label_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginStart="@dimen/padding_8"
+        android:paddingTop="@dimen/padding_8"
+        android:paddingBottom="@dimen/padding_8"
+        android:text="@string/label_3"
+        android:textColor="@color/color_label_3"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_label_top"
+        app:layout_constraintStart_toEndOf="@+id/textView_label_top"
+        app:layout_constraintTop_toTopOf="@+id/textView_label_top" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_label_rank_crypto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_8"
+        android:paddingTop="@dimen/padding_8"
+        android:paddingBottom="@dimen/padding_8"
+        android:text="@string/label_rank_crypto"
+        android:textColor="@color/color_textView_coin_name"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_label_top"
+        app:layout_constraintStart_toEndOf="@+id/textView_label_3"
+        app:layout_constraintTop_toTopOf="@+id/textView_label_top" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_one_layout"
@@ -26,7 +58,7 @@
         app:layout_constraintEnd_toStartOf="@+id/top_two_layout"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top">
 
         <include
             android:id="@+id/included_top_one_layout"
@@ -41,7 +73,7 @@
         app:layout_constraintEnd_toStartOf="@+id/top_three_layout"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/top_one_layout"
-        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top">
 
         <include
             android:id="@+id/included_top_two_layout"
@@ -56,7 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/top_two_layout"
-        app:layout_constraintTop_toBottomOf="@+id/textView_label_top_3_coin">
+        app:layout_constraintTop_toBottomOf="@+id/textView_label_top">
 
         <include
             android:id="@+id/included_top_three_layout"

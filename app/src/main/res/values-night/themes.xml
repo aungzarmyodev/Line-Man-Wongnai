@@ -2,6 +2,18 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.LineManWongnaiApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondaryDark</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:statusBarColor">@color/colorOnSecondary</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- For Night/Dark Mode -->
+        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+
     </style>
 </resources>
