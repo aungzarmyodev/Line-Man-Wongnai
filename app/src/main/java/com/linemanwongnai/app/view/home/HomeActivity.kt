@@ -18,6 +18,7 @@ import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
 import com.linemanwongnai.app.databinding.CoinDetailViewBottomSheetBinding
 import com.linemanwongnai.app.model.CoinModel
+import com.linemanwongnai.app.model.FriendInviteModel
 import com.linemanwongnai.app.model.Status
 import com.linemanwongnai.app.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,12 +36,15 @@ class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
     private var isRefreshing = true
-    private var coinList = mutableListOf<CoinModel>()
+    private var coinList = mutableListOf<Any>()
     private var topRankThreeCoinList = mutableListOf<CoinModel>()
     private var isLoadMore = false
     private var visibleThreshold = 4
     private var lastVisibleItem: Int = 0
     private var totalItemCount: Int = 0
+    private var startIndexFriendInvite = 5
+    private var showIndexFriendInvite = startIndexFriendInvite
+    private var alreadyShowFriendInvite = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +112,7 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
-        binding.imageCancel.setOnClickListener {
+        binding.imageClearIcon.setOnClickListener {
             binding.editTextSearch.text = null
             binding.recyclerView.visibility = View.VISIBLE
             binding.textViewEmpty.visibility = View.GONE
@@ -135,12 +139,15 @@ class HomeActivity : AppCompatActivity() {
 
                         // get top rank three coin
                         topRankThreeCoinList.addAll(
-                            coinList.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 })
+                            result.data.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 })
 
                         adapter.addData(result.data, isRefreshing)
                         adapter.addTopRankThreeCoin(topRankThreeCoinList)
+
+                        // add friend invite layout
+                        addFriendInviteLayout()
                     } else {
-                        if (coinList.isEmpty()) {
+                        if (adapter.itemCount == 0) {
                             binding.textViewEmpty.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
                         } else {
@@ -153,7 +160,7 @@ class HomeActivity : AppCompatActivity() {
                 Status.ERROR -> {
 
                     binding.refreshLayout.isRefreshing = false
-                    if (coinList.isEmpty()) {
+                    if (adapter.itemCount == 0) {
                         binding.loading.visibility = View.GONE
                     }
                     val message =
@@ -257,6 +264,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         searchObservable()
+        inviteFriendObservable()
     }
 
     private fun searchObservable() {
@@ -287,6 +295,27 @@ class HomeActivity : AppCompatActivity() {
 
                 }
             }
+        }
+    }
+
+    // calculation for add friend invite layout interval 5,10,20,40
+    private fun addFriendInviteLayout() {
+        while (adapter.itemCount > showIndexFriendInvite + 2) { // +2 for top rank three layout + Buy,Sell and hold crypto
+            adapter.coinList.add(
+                showIndexFriendInvite + alreadyShowFriendInvite,
+                FriendInviteModel(Utils.FRIEND_INVITE_LINK)
+            )
+            alreadyShowFriendInvite++
+            showIndexFriendInvite =
+                showIndexFriendInvite * 2 + startIndexFriendInvite
+        }
+    }
+
+    private fun inviteFriendObservable() {
+        adapter.itemFriendInviteClick.observe(this) { url ->
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
         }
     }
 }
