@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
@@ -36,7 +37,10 @@ class HomeActivity : AppCompatActivity() {
     private var isRefreshing = true
     private var coinList = mutableListOf<CoinModel>()
     private var topRankThreeCoinList = mutableListOf<CoinModel>()
-    private var pageNumber = 1
+    private var isLoadMore = false
+    private var visibleThreshold = 4
+    private var lastVisibleItem: Int = 0
+    private var totalItemCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +55,9 @@ class HomeActivity : AppCompatActivity() {
     private fun initView() {
 
         // coin list
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerView.layoutManager = layoutManager
+
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
@@ -62,6 +67,24 @@ class HomeActivity : AppCompatActivity() {
             topRankThreeCoinList.clear()
             isRefreshing = true
         }
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy <= 0)
+                    return
+
+                totalItemCount = layoutManager.itemCount
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                if (!isLoadMore && totalItemCount <= lastVisibleItem + visibleThreshold) {
+                    viewModel.getCoinList()
+                    adapter.showLoadingBar(true)
+                    isRefreshing = false
+                    isLoadMore = true
+                }
+            }
+        })
 
         binding.editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -79,6 +102,7 @@ class HomeActivity : AppCompatActivity() {
                     adapter.addTopRankThreeCoin(topRankThreeCoinList)
                 }
             }
+
             override fun afterTextChanged(p0: Editable?) {
 
             }
@@ -96,9 +120,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initObservable() {
         viewModel.liveData.observe(this) { result ->
+            adapter.showLoadingBar(false)
             when (result.status) {
                 Status.SUCCESS -> {
                     binding.loading.visibility = View.GONE
+                    isLoadMore = false
                     if (!result?.data.isNullOrEmpty()) {
                         binding.textViewEmpty.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
@@ -113,7 +139,6 @@ class HomeActivity : AppCompatActivity() {
 
                         adapter.addData(result.data, isRefreshing)
                         adapter.addTopRankThreeCoin(topRankThreeCoinList)
-
                     } else {
                         if (coinList.isEmpty()) {
                             binding.textViewEmpty.visibility = View.VISIBLE
