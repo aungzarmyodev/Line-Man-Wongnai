@@ -28,18 +28,20 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
     private val coinList = mutableListOf<CoinModel>()
     private val topRankThreeCoinList = mutableListOf<CoinModel>()
-
     val itemClick = MutableLiveData<CoinModel>()
 
     // filter by search coin
     private var isSearch = false
+
+    private var footerViewHolder: FooterViewHolder? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return when (viewType) {
             footerType -> {
                 val view =
                     FooterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FooterViewHolder(view)
+                footerViewHolder = FooterViewHolder(view)
+                footerViewHolder as FooterViewHolder
             }
 
             headerType -> {
@@ -89,11 +91,8 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
             itemCount = coinList.size + 1
         } else {
             if (coinList.isNotEmpty()) {
-                itemCount = if (topRankThreeCoinList.isNotEmpty()) {
-                    coinList.size + 3
-                } else {
-                    coinList.size + 2
-                }
+                itemCount = if (topRankThreeCoinList.isNotEmpty()) coinList.size + 3
+                else coinList.size + 2
             }
         }
         return itemCount
@@ -119,6 +118,14 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     fun addTopRankThreeCoin(list: List<CoinModel>) {
         topRankThreeCoinList.clear()
         topRankThreeCoinList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun showLoadingBar(isShowLoadingBar: Boolean) {
+        if (footerViewHolder != null) {
+            footerViewHolder!!.binding.loading.visibility =
+                if (isShowLoadingBar) View.VISIBLE else View.GONE
+        }
         notifyDataSetChanged()
     }
 
@@ -152,15 +159,6 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
                     itemClick.postValue(topRankThreeCoinList[2])
                 }
             }
-//
-//            is InviteFriendViewHolder -> {
-//                holder.onBind()
-//                holder.binding.root.setOnClickListener { }
-//            }
-//
-//            is FooterViewHolder -> {
-//
-//            }
         }
     }
 }
@@ -337,11 +335,7 @@ class HeaderViewHolder(val binding: HeaderViewBinding) : ViewHolder(binding.root
     }
 }
 
-class FooterViewHolder(private val binding: FooterViewBinding) : ViewHolder(binding.root) {
-    fun onBind() {
-        // binding.textView2
-    }
-}
+class FooterViewHolder(val binding: FooterViewBinding) : ViewHolder(binding.root)
 
 class InviteFriendViewHolder(val binding: InviteFriendLayoutBinding) :
     ViewHolder(binding.root) {

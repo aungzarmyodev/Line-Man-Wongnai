@@ -20,6 +20,7 @@ object Utils {
             .load(imageUri)
             .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.background_circle_image_view)
+            .override(48, 48)
             .error(R.drawable.background_circle_image_view)
             .into(imageView)
     }
