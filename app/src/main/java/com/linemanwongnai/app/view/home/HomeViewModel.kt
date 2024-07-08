@@ -21,6 +21,9 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
     private var coinDetailMutableLiveData = MutableLiveData<NetworkResult<CoinModel>>()
     val coinDetailLiveData: LiveData<NetworkResult<CoinModel>> = coinDetailMutableLiveData
 
+    private var searchMutableLiveData = MutableLiveData<NetworkResult<List<CoinModel>>>()
+    val searchLiveData: LiveData<NetworkResult<List<CoinModel>>> = searchMutableLiveData
+
     init {
         mutableLiveData.postValue(NetworkResult.Loading())
         getCoinList()
@@ -54,6 +57,22 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
                 }
             } catch (e: Exception) {
                 coinDetailMutableLiveData.postValue(NetworkResult.Error(e))
+            }
+        }
+    }
+
+    fun search(keyword: String) {
+        viewModelScope.launch {
+            try {
+                val result = coinRepository.searchCoin(keyword)
+                val coinList = result?.data?.coinList
+                if (!coinList.isNullOrEmpty()) {
+                    searchMutableLiveData.postValue(NetworkResult.Success(coinList))
+                } else {
+                    searchMutableLiveData.postValue(NetworkResult.Success(emptyList()))
+                }
+            } catch (e: Exception) {
+                searchMutableLiveData.postValue(NetworkResult.Error(e))
             }
         }
     }
