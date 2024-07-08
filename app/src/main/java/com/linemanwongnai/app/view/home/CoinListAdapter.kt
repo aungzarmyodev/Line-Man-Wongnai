@@ -31,7 +31,8 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
 
     val itemClick = MutableLiveData<CoinModel>()
 
-
+    // filter by search coin
+    private var isSearch = false
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return when (viewType) {
@@ -66,30 +67,50 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            headerType -> headerType
-            itemHeaderType -> itemHeaderType
-            coinList.size + 2 -> footerType
-            else -> itemType
+
+        return if (isSearch) {
+            when (position) {
+                0 -> itemHeaderType
+                else -> itemType
+            }
+        } else {
+            when (position) {
+                headerType -> headerType
+                itemHeaderType -> itemHeaderType
+                coinList.size + 2 -> footerType
+                else -> itemType
+            }
         }
     }
 
     override fun getItemCount(): Int {
         var itemCount = 0
-        if (coinList.isNotEmpty()) {
-            itemCount = if (topRankThreeCoinList.isNotEmpty()) {
-                coinList.size + 3
-            } else {
-                coinList.size + 2
+        if (isSearch) {
+            itemCount = coinList.size + 1
+        } else {
+            if (coinList.isNotEmpty()) {
+                itemCount = if (topRankThreeCoinList.isNotEmpty()) {
+                    coinList.size + 3
+                } else {
+                    coinList.size + 2
+                }
             }
         }
         return itemCount
     }
 
     fun addData(list: List<CoinModel>, isRefreshing: Boolean) {
+        isSearch = false
         if (isRefreshing) {
             coinList.clear()
         }
+        coinList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun addSearchData(list: List<CoinModel>) {
+        isSearch = true
+        coinList.clear()
         coinList.addAll(list)
         notifyDataSetChanged()
     }
@@ -104,17 +125,17 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is CoinViewHolder -> {
-                if (topRankThreeCoinList.isNotEmpty()) {
+                if (topRankThreeCoinList.isNotEmpty() && !isSearch) {
                     holder.onBind(coinList[position - 2])
                 } else {
                     holder.onBind(coinList[position - 1])
                 }
 
                 holder.itemView.setOnClickListener {
-                    if (topRankThreeCoinList.isNotEmpty()) {
+                    if (topRankThreeCoinList.isNotEmpty() && !isSearch) {
                         itemClick.postValue(coinList[position - 2])
                     } else {
-                        itemClick.postValue(coinList[position - 2])
+                        itemClick.postValue(coinList[position - 1])
                     }
                 }
             }

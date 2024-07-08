@@ -6,7 +6,7 @@
     android:paddingTop="@dimen/padding_8">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView_label_top_3_coin"
+        android:id="@+id/textView_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"

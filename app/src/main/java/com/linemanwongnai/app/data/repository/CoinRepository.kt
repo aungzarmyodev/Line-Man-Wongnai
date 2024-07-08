@@ -20,4 +20,10 @@ class CoinRepository @Inject constructor(private val coinApi: CoinApi) {
             coinApi.getCoinDetail(uuid)
         }
     }
+
+    suspend fun searchCoin(keyword: String): CoinListResponseModel? {
+        return withContext(Dispatchers.IO) {
+            coinApi.searchCoin(keyword)
+        }
+    }
 }
