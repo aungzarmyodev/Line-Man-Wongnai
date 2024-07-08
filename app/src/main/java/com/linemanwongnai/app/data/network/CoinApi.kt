@@ -9,12 +9,17 @@ import retrofit2.http.Query
 interface CoinApi {
 
     @GET("/v2/coins")
-    suspend fun getCoinList(): CoinListResponseModel?
+    suspend fun getCoinList(
+        @Query("limit") limit: Int
+    ): CoinListResponseModel?
 
     @GET("/v2/coin/{uuid}")
     suspend fun getCoinDetail(@Path("uuid") uuid: String): CoinDetailResponseModel?
 
     @GET("/v2/coins")
-    suspend fun searchCoin(@Query("search") keyword: String): CoinListResponseModel?
+    suspend fun searchCoin(
+        @Query("search") keyword: String,
+        @Query("limit") limit: Int
+    ): CoinListResponseModel?
 
 }

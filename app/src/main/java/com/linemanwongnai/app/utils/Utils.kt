@@ -11,6 +11,8 @@ object Utils {
     const val MILLION = 1000000f
     const val BILLION = 1000000000f
     const val TRILLION = 1000000000000f
+    const val LIMIT = 20
+    const val SEARCH_LIMIT = 7
     fun setImage(context: Context, imageUri: String?, imageView: AppCompatImageView) {
 
         // image caching
