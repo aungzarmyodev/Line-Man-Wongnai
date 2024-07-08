@@ -16,10 +16,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.linemanwongnai.app.R
 import com.linemanwongnai.app.databinding.ActivityHomeBinding
 import com.linemanwongnai.app.databinding.CoinDetailViewBottomSheetBinding
+import com.linemanwongnai.app.model.CoinModel
 import com.linemanwongnai.app.model.Status
 import com.linemanwongnai.app.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.NumberFormatException
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -32,11 +32,10 @@ class HomeActivity : AppCompatActivity() {
     @Inject
     lateinit var adapter: CoinListAdapter
 
-    @Inject
-    lateinit var searchCoinListAdapter: SearchCoinListAdapter
-
     private val viewModel: HomeViewModel by viewModels()
     private var isRefreshing = true
+    private var coinList = mutableListOf<CoinModel>()
+    private var topRankThreeCoinList = mutableListOf<CoinModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +55,10 @@ class HomeActivity : AppCompatActivity() {
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
-        // search coin list
-        binding.searchRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.searchRecyclerView.setHasFixedSize(true)
-        binding.searchRecyclerView.adapter = searchCoinListAdapter
-
         binding.refreshLayout.setOnRefreshListener {
             viewModel.getCoinList()
+            coinList.clear()
+            topRankThreeCoinList.clear()
             isRefreshing = true
         }
 
@@ -77,23 +72,24 @@ class HomeActivity : AppCompatActivity() {
                     viewModel.search(char.toString())
                 } else {
                     binding.recyclerView.visibility = View.VISIBLE
-                    binding.refreshLayout.visibility = View.VISIBLE
-                    binding.textViewLabel.visibility = View.GONE
-                    binding.searchRecyclerView.visibility = View.GONE
+                    binding.textViewEmpty.visibility = View.GONE
+                    binding.textViewSorry.visibility = View.GONE
+                    adapter.addData(coinList, true)
+                    adapter.addTopRankThreeCoin(topRankThreeCoinList)
                 }
             }
-
             override fun afterTextChanged(p0: Editable?) {
 
             }
         })
 
         binding.imageCancel.setOnClickListener {
-
+            binding.editTextSearch.text = null
             binding.recyclerView.visibility = View.VISIBLE
-            binding.refreshLayout.visibility = View.VISIBLE
-            binding.textViewLabel.visibility = View.GONE
-            binding.searchRecyclerView.visibility = View.GONE
+            binding.textViewEmpty.visibility = View.GONE
+            binding.textViewSorry.visibility = View.GONE
+            adapter.addData(coinList, true)
+            adapter.addTopRankThreeCoin(topRankThreeCoinList)
         }
     }
 
@@ -102,29 +98,38 @@ class HomeActivity : AppCompatActivity() {
             when (result.status) {
                 Status.SUCCESS -> {
                     binding.loading.visibility = View.GONE
-                    val coinList = result?.data
-                    if (!coinList.isNullOrEmpty()) {
+                    if (!result?.data.isNullOrEmpty()) {
                         binding.textViewEmpty.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
-                        binding.refreshLayout.visibility = View.VISIBLE
                         binding.refreshLayout.isRefreshing = false
 
-                        // get top rank three coin
-                        val topRankThreeCoin =
-                            coinList.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 }
+                        // add coin list
+                        coinList.addAll(result.data!!)
 
-                        adapter.addData(coinList, isRefreshing)
-                        adapter.addTopRankThreeCoin(topRankThreeCoin)
+                        // get top rank three coin
+                        topRankThreeCoinList.addAll(
+                            coinList.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 })
+
+                        adapter.addData(result.data, isRefreshing)
+                        adapter.addTopRankThreeCoin(topRankThreeCoinList)
 
                     } else {
-                        binding.textViewEmpty.visibility = View.VISIBLE
-                        binding.recyclerView.visibility = View.GONE
+                        if (coinList.isEmpty()) {
+                            binding.textViewEmpty.visibility = View.VISIBLE
+                            binding.recyclerView.visibility = View.GONE
+                        } else {
+                            Toast.makeText(this, getString(R.string.empty_data), Toast.LENGTH_LONG)
+                                .show()
+                        }
                     }
                 }
 
                 Status.ERROR -> {
-                    binding.loading.visibility = View.GONE
+
                     binding.refreshLayout.isRefreshing = false
+                    if (coinList.isEmpty()) {
+                        binding.loading.visibility = View.GONE
+                    }
                     val message =
                         if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
                             R.string.label_unknown_error
@@ -232,21 +237,18 @@ class HomeActivity : AppCompatActivity() {
         viewModel.searchLiveData.observe(this) { result ->
             when (result.status) {
                 Status.SUCCESS -> {
-                    val coinList = result?.data
-                    if (!coinList.isNullOrEmpty()) {
-                        binding.textViewLabel.visibility = View.VISIBLE
-                        binding.searchRecyclerView.visibility = View.VISIBLE
-                        binding.refreshLayout.visibility = View.GONE
-                        binding.recyclerView.visibility = View.GONE
-                        searchCoinListAdapter.addData(coinList)
+                    val searchCoinList = result?.data
+                    if (!searchCoinList.isNullOrEmpty()) {
+                        adapter.addSearchData(searchCoinList)
                     } else {
                         binding.textViewEmpty.visibility = View.VISIBLE
+                        binding.textViewSorry.visibility = View.VISIBLE
+                        binding.textViewEmpty.text = getString(R.string.label_no_result_by_search)
                         binding.recyclerView.visibility = View.GONE
                     }
                 }
 
                 Status.ERROR -> {
-
                     binding.refreshLayout.isRefreshing = false
                     val message =
                         if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
