@@ -1,5 +1,6 @@
 package com.linemanwongnai.app.view.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,7 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
                     mutableLiveData.postValue(NetworkResult.Success(emptyList()))
                 }
             } catch (e: Exception) {
+                Log.i("HTTP 429 Error ", e.message.toString())
                 mutableLiveData.postValue(NetworkResult.Error(e))
             }
         }
