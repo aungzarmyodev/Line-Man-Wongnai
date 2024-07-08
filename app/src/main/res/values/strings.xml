@@ -17,5 +17,6 @@
     <string name="label_price_trillion">$ %s trillion</string>
     <string name="label_sorry">Sorry</string>
     <string name="label_no_result_by_search">No result match this keyword</string>
+    <string name="label_invite_friend_reason"><![CDATA[You can earn $10 when you invite a friend to buy crypto. <font color="blue">Invite your friend.</font>]]></string>
 
 </resources>
