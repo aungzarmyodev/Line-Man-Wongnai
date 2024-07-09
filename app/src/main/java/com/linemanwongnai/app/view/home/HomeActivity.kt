@@ -101,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
             topRankThreeCoinList.clear()
             isRefreshing = true
             offset = 1
-            viewModel.getCoinList(Utils.LIMIT, offset)
+            viewModel.getCoinList(Utils.LIMIT, 0)
         }
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -161,7 +161,7 @@ class HomeActivity : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())
         runnable = object : Runnable {
             override fun run() {
-                // Load your data here
+                // Load data
                 if (isRefreshing) {
                     val limit = Utils.LIMIT * offset
                     viewModel.getCoinList(limit, 0)
