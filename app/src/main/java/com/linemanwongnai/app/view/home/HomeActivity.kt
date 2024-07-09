@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -37,15 +39,19 @@ class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
     private var isRefreshing = true
+    private var offset = 1
     private var coinList = mutableListOf<Any>()
     private var topRankThreeCoinList = mutableListOf<CoinModel>()
     private var isLoadMore = false
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
     private var visibleThreshold = 4
     private var lastVisibleItem: Int = 0
     private var totalItemCount: Int = 0
     private var startIndexFriendInvite = 5
     private var showIndexFriendInvite = startIndexFriendInvite
     private var alreadyShowFriendInvite = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +71,22 @@ class HomeActivity : AppCompatActivity() {
         initView()
     }
 
+    override fun onStart() {
+        super.onStart()
+        loadDataEveryTenSecond()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onDestroy() {
+        // Remove callbacks to avoid memory leaks
+        handler.removeCallbacks(runnable)
+        super.onDestroy()
+    }
+
     private fun initView() {
 
         // coin list
@@ -75,10 +97,11 @@ class HomeActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
 
         binding.refreshLayout.setOnRefreshListener {
-            viewModel.getCoinList()
             coinList.clear()
             topRankThreeCoinList.clear()
             isRefreshing = true
+            offset = 1
+            viewModel.getCoinList(Utils.LIMIT, offset)
         }
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -91,7 +114,8 @@ class HomeActivity : AppCompatActivity() {
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
                 if (!isLoadMore && totalItemCount <= lastVisibleItem + visibleThreshold) {
-                    viewModel.getCoinList()
+                    offset++
+                    viewModel.getCoinList(Utils.LIMIT, offset)
                     adapter.showLoadingBar(true)
                     isRefreshing = false
                     isLoadMore = true
@@ -107,12 +131,14 @@ class HomeActivity : AppCompatActivity() {
             override fun onTextChanged(char: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!char.isNullOrEmpty()) {
                     viewModel.search(char.toString())
+                    handler.removeCallbacks(runnable)
                 } else {
                     binding.recyclerView.visibility = View.VISIBLE
                     binding.textViewEmpty.visibility = View.GONE
                     binding.textViewSorry.visibility = View.GONE
-                    adapter.addData(coinList, true)
+                    adapter.addData(coinList)
                     adapter.addTopRankThreeCoin(topRankThreeCoinList)
+                    loadDataEveryTenSecond()
                 }
             }
 
@@ -126,9 +152,26 @@ class HomeActivity : AppCompatActivity() {
             binding.recyclerView.visibility = View.VISIBLE
             binding.textViewEmpty.visibility = View.GONE
             binding.textViewSorry.visibility = View.GONE
-            adapter.addData(coinList, true)
+            adapter.addData(coinList)
             adapter.addTopRankThreeCoin(topRankThreeCoinList)
         }
+    }
+
+    private fun loadDataEveryTenSecond() {
+        handler = Handler(Looper.getMainLooper())
+        runnable = object : Runnable {
+            override fun run() {
+                // Load your data here
+                if (isRefreshing) {
+                    val limit = Utils.LIMIT * offset
+                    viewModel.getCoinList(limit, 0)
+                }
+                // Schedule the runnable to run again after 10 seconds
+                handler.postDelayed(this, 10000)
+            }
+        }
+        // Start the initial run
+        handler.post(runnable)
     }
 
     private fun initObservable() {
@@ -138,23 +181,39 @@ class HomeActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     binding.loading.visibility = View.GONE
                     isLoadMore = false
+
                     if (!result?.data.isNullOrEmpty()) {
                         binding.textViewEmpty.visibility = View.GONE
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.refreshLayout.isRefreshing = false
 
-                        // add coin list
-                        coinList.addAll(result.data!!)
+                        // set default values
+                        if (isRefreshing) {
+                            coinList.clear()
+                            topRankThreeCoinList.clear()
+                            showIndexFriendInvite = startIndexFriendInvite
+                            alreadyShowFriendInvite = 0
+                        }
 
+                        coinList.addAll(result.data!!)
+                        // calculation for add friend invite layout interval 5,10,20,40
+                        while (coinList.size >= showIndexFriendInvite) { // +2 for top rank three layout + Buy,Sell and hold crypto
+                            coinList.add(
+                                showIndexFriendInvite,
+                                FriendInviteModel(Utils.FRIEND_INVITE_LINK)
+                            )
+                            showIndexFriendInvite =
+                                showIndexFriendInvite * 2 + startIndexFriendInvite
+                        }
+
+                        adapter.addData(coinList)
                         // get top rank three coin
                         topRankThreeCoinList.addAll(
                             result.data.filter { it.rank == 1 || it.rank == 2 || it.rank == 3 })
-
-                        adapter.addData(result.data, isRefreshing)
                         adapter.addTopRankThreeCoin(topRankThreeCoinList)
+                        // set refreshing = true
+                        isRefreshing = true
 
-                        // add friend invite layout
-                        addFriendInviteLayout()
                     } else {
                         if (adapter.itemCount == 0) {
                             binding.textViewEmpty.visibility = View.VISIBLE
@@ -173,7 +232,7 @@ class HomeActivity : AppCompatActivity() {
                         binding.loading.visibility = View.GONE
                     }
                     val message =
-                        if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
+                        if (!result?.error?.localizedMessage.isNullOrEmpty()) result?.error?.localizedMessage.toString() else getString(
                             R.string.label_unknown_error
                         )
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -294,7 +353,7 @@ class HomeActivity : AppCompatActivity() {
                 Status.ERROR -> {
                     binding.refreshLayout.isRefreshing = false
                     val message =
-                        if (!result?.error?.message.isNullOrEmpty()) result?.error?.message.toString() else getString(
+                        if (!result?.error?.localizedMessage.isNullOrEmpty()) result?.error?.localizedMessage.toString() else getString(
                             R.string.label_unknown_error
                         )
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
@@ -304,19 +363,6 @@ class HomeActivity : AppCompatActivity() {
 
                 }
             }
-        }
-    }
-
-    // calculation for add friend invite layout interval 5,10,20,40
-    private fun addFriendInviteLayout() {
-        while (adapter.itemCount > showIndexFriendInvite + 2) { // +2 for top rank three layout + Buy,Sell and hold crypto
-            adapter.coinList.add(
-                showIndexFriendInvite + alreadyShowFriendInvite,
-                FriendInviteModel(Utils.FRIEND_INVITE_LINK)
-            )
-            alreadyShowFriendInvite++
-            showIndexFriendInvite =
-                showIndexFriendInvite * 2 + startIndexFriendInvite
         }
     }
 

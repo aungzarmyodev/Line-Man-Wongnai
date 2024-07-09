@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 class CoinRepository @Inject constructor(private val coinApi: CoinApi) {
 
-    suspend fun getCoinList(): CoinListResponseModel? {
+    suspend fun getCoinList(limit: Int, offset: Int): CoinListResponseModel? {
         return withContext(Dispatchers.IO) {
-            coinApi.getCoinList(Utils.LIMIT)
+            coinApi.getCoinList(limit, offset)
         }
     }
 

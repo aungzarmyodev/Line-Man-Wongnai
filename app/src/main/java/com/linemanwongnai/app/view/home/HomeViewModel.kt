@@ -1,6 +1,5 @@
 package com.linemanwongnai.app.view.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.linemanwongnai.app.data.repository.CoinRepository
 import com.linemanwongnai.app.model.CoinModel
 import com.linemanwongnai.app.model.NetworkResult
+import com.linemanwongnai.app.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,13 +27,13 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
 
     init {
         mutableLiveData.postValue(NetworkResult.Loading())
-        getCoinList()
+        // getCoinList(Utils.LIMIT, 0)
     }
 
-    fun getCoinList() {
+    fun getCoinList(limit: Int, offset: Int) {
         viewModelScope.launch {
             try {
-                val result = coinRepository.getCoinList()
+                val result = coinRepository.getCoinList(limit, offset)
                 val coinList = result?.data?.coinList
                 if (!coinList.isNullOrEmpty()) {
                     mutableLiveData.postValue(NetworkResult.Success(coinList))
@@ -41,7 +41,6 @@ class HomeViewModel @Inject constructor(private val coinRepository: CoinReposito
                     mutableLiveData.postValue(NetworkResult.Success(emptyList()))
                 }
             } catch (e: Exception) {
-                Log.i("HTTP 429 Error ", e.message.toString())
                 mutableLiveData.postValue(NetworkResult.Error(e))
             }
         }

@@ -14,6 +14,7 @@ object Utils {
     const val LIMIT = 20
     const val SEARCH_LIMIT = 7
     const val FRIEND_INVITE_LINK = "https://careers.lmwn.com"
+    const val API_KEY = "coinrankingbc93fd9e46077d7761d92984ab58ec4e03a1f41ffc64ad1e"
     fun setImage(context: Context, imageUri: String?, imageView: AppCompatImageView) {
 
         // image caching

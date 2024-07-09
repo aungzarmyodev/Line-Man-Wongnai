@@ -10,7 +10,8 @@ interface CoinApi {
 
     @GET("/v2/coins")
     suspend fun getCoinList(
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
     ): CoinListResponseModel?
 
     @GET("/v2/coin/{uuid}")
