@@ -113,13 +113,10 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
         return itemCount
     }
 
-    fun addData(list: List<Any>, isRefreshing: Boolean) {
+    fun addData(list: List<Any>) {
         isSearch = false
-        if (isRefreshing) {
-            coinList.clear()
-        }
+        coinList.clear()
         coinList.addAll(list)
-        notifyDataSetChanged()
     }
 
     fun addSearchData(list: List<CoinModel>) {
@@ -133,7 +130,6 @@ class CoinListAdapter @Inject constructor() : RecyclerView.Adapter<ViewHolder>()
     fun addTopRankThreeCoin(list: List<CoinModel>) {
         topRankThreeCoinList.clear()
         topRankThreeCoinList.addAll(list)
-        notifyDataSetChanged()
     }
 
     fun showLoadingBar(isShowLoadingBar: Boolean) {
