@@ -199,9 +199,10 @@ class HomeActivity : AppCompatActivity() {
                         // calculation for add friend invite layout interval 5,10,20,40
                         while (coinList.size >= showIndexFriendInvite) { // +2 for top rank three layout + Buy,Sell and hold crypto
                             coinList.add(
-                                showIndexFriendInvite,
+                                showIndexFriendInvite + alreadyShowFriendInvite,
                                 FriendInviteModel(Utils.FRIEND_INVITE_LINK)
                             )
+                            alreadyShowFriendInvite++
                             showIndexFriendInvite =
                                 showIndexFriendInvite * 2 + startIndexFriendInvite
                         }
